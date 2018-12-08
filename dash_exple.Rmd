@@ -1,0 +1,88 @@
+---
+title: "projection of Tunisian population 2014-2044"
+author: "Kaouthar Driss"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    social: menu
+    source_code: embed
+runtime: shiny
+---
+
+```{r global, include=FALSE}
+# load data in 'global' chunk so it can be shared by all users of the dashboard
+library(biclust)
+library(flexdashboard)
+library(leaflet)
+library(readr)
+library(sp)
+library(maps)
+library(ggmap)
+library(maptools)
+library(geojsonio)
+library(rgdal)
+library(plyr)
+library(highcharter)
+data1<- read_csv("C:/Users/KATHY/Desktop/leaflet/ins_pop.csv")
+data2<-  read_csv("C:/Users/KATHY/Desktop/leaflet/Delegation Tunisie.csv")
+i=match(data1$Region,data2)
+i
+data$HASC=data2[i]
+data1$X3=c()
+data1$X4=c()
+data1$X5=c()
+data1$X6=c()
+data1$X7=c()
+
+set.seed(1)
+res <- biclust(BicatYeast, method=BCPlaid(), verbose=FALSE)
+```
+
+Inputs {.sidebar}
+-----------------------------------------------------------------------
+
+```{r}
+ selectInput("clusterNum", label = h3("Cluster number"), 
+    choices = list("1" = 1, "2" = 2, "3" = 3, "4" = 4, "5" = 5), 
+    selected = 1)
+```
+
+
+Row
+-----------------------------------------------------------------------
+
+### Heatmap
+    
+```{r}
+
+num <- reactive(as.integer(input$clusterNum))
+
+col = colorRampPalette(c("red", "white", "darkblue"), space="Lab")(10)
+renderPlot({
+    p = par(mai=c(0,0,0,0))
+    heatmapBC(BicatYeast, res, number=num(), xlab="", ylab="",
+      order=TRUE, useRaster=TRUE, col=col)
+    par(p)
+})
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Parallel Coordinates
+    
+```{r}
+renderPlot(
+  parallelCoordinates(BicatYeast, res, number=num())
+)
+```
+   
+### Data for Selected Cluster
+
+```{r}
+# only display table for values in cluster 4
+renderTable(
+  BicatYeast[which(res@RowxNumber[, num()]), which(res@NumberxCol[num(), ])]
+)
+```

@@ -1,0 +1,175 @@
+---
+title: projection of Tunisian population 2014-2044
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    social: menu
+    source_code: embeded
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(leaflet)
+library(readr)
+library(sp)
+library(maps)
+library(ggmap)
+library(maptools)
+library(geojsonio)
+library(rgdal)
+library(plyr)
+library(highcharter)
+'%ni%' <- Negate('%in%')
+#pp<-c("Mouvement Du Peuple","Machrouu Tounes","Nidaa Tounes","Ennahdha",
+#      "Parti Destourien Libre","Courant Démocrate","Front Populaire",
+#     "Union Civile")
+dt_munic_res <- read_csv("C:/Users/KATHY/Desktop/leaflet/ins_pop.csv")
+load("fdc.RData")
+fdc2=fdc
+fdc2=cbind.Spatial(fdc2,dt_munic_res[,-c(74:78)])
+Vcols=grep("V",colnames(fdc2@data))
+Ncols=grep("Name",colnames(fdc2@data))
+###
+pr1<-rowSums(fdc2@data[,Vcols],na.rm=T)
+Xpr=sweep(x = fdc2@data[,Vcols],MARGIN = 1,STATS = pr1,FUN = "/")
+colnames(Xpr)=paste0("vpr",colnames(Xpr))
+Xpr=100*Xpr
+fdc2=cbind.Spatial(fdc2,Xpr)
+### Calcul des sieges 
+### colorer le map
+all_lists=k_l=c()
+for(j in Ncols){
+  x=fdc2@data[,j]
+  all_lists=c(all_lists,x)
+  k_l=c(k_l,fdc2@data[,j+1])
+}
+pp=unique(all_lists[k_l!="Liste indépendante"])
+pp=as.vector(na.omit(pp))
+pp=setdiff(pp,c("Ennahdha","Nidaa Tounes","Courant Démocrate"))
+pp=c("Listes Indépendantes","Courant Démocrate","Ennahdha","Nidaa Tounes",pp)
+c1=c("green","orange","blue","red")
+o_c1=setdiff(colors(),c1)
+set.seed(12347)
+o_c1=sample(size = length(pp)-4,x = o_c1)
+o_c1=c(c1,o_c1)
+x=fdc2@data$Name1
+x[x%ni%c(pp[-1],NA)]="Listes Indépendantes"
+x=factor(x,levels=pp)
+x=droplevels(x)
+l=length(levels(x))
+factpal <- colorFactor(o_c1[1:l],x )
+###   Popups
+VPRcols=grep("vpr",colnames(fdc2@data))
+SiegeObCols=grep("SiegeOb",colnames(fdc2@data))
+fpaste=function(i,j){
+  if(is.na(fdc2@data[i,Ncols[j]])==F){
+    z=paste0(fdc2@data[i,Ncols[j]],": ",fdc2@data[i,Vcols[j]]," (",round(fdc2@data[i,VPRcols[j]],2),"%,   ",fdc2@data[i,SiegeObCols[j]],"s.)","<br/>")
+  }
+  else z="" 
+  z
+}
+fpaste2=function(i){
+  j=1:length(Ncols)
+  z=sapply(j,function(jj)fpaste(i,jj))
+  z=unlist(z)
+  z=paste0(z,collapse = "")
+  paste("<strong>",fdc2@data$name_fr[i],"/",fdc2@data$name[i], "</strong>","<br/>",z)
+}
+labpop=sapply(1:nrow(fdc2@data),fpaste2)
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### 
+
+http://dhafermalouche.net
+
+```{r}
+leaflet(fdc2) %>%addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(stroke = FALSE, smoothFactor = 0.2, fillOpacity = .8,
+              opacity = 1,dashArray = "3",
+              fillColor = ~factpal(x),
+              highlight = highlightOptions(
+                weight = 5,
+                color = "black",
+                bringToFront = TRUE),popup =~labpop)
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### 
+
+```{r}
+x1=as.character(fdc2@data$Name1)
+x2=as.character(fdc2@data$Name2)
+x3=as.character(fdc2@data$Name3)
+x1[x1%ni%c(pp[-1],NA)]="Listes Indépendantes"
+x2[x2%ni%c(pp[-1],NA)]="Listes Indépendantes"
+x3[x3%ni%c(pp[-1],NA)]="Listes Indépendantes"
+z1=xtabs(~x1)
+z2=xtabs(~x2)
+z3=xtabs(~x3)
+z1=data.frame(z1)
+z2=data.frame(z2)
+z3=data.frame(z3)
+colnames(z1)=colnames(z2)=colnames(z3)=c("Party","Munic")
+zz=rbind.data.frame(z1,z2,z3)
+zz$Rang=c(rep("1er",nrow(z1)),rep("2ième",nrow(z2)),rep("3ième",nrow(z3)))
+lv=zz[zz$Rang==unique(zz$Rang)[1],]
+lv=lv$Party[order(lv$Munic,decreasing = T)]
+zz$Party=factor(zz$Party,levels=lv)
+zz=na.omit(zz)
+#library(highcharter)
+#y0<-paste0("{point.","Party","}")
+#y1<-sprintf("{point.%s:.0f}", c("Munic"))
+library(ggplot2)
+p<-ggplot(zz,aes(x=Party,y=Munic,fill=Rang,group=Rang))
+p<-p+geom_bar(position = position_dodge(width = 0.9),stat = "identity")+ylab("# of Municipality")
+p<-p+coord_flip()
+p<-p+theme_bw()
+p<-p+theme(
+     panel.grid.major = element_blank(),
+     panel.grid.minor = element_blank(),
+     panel.border = element_blank(),
+     panel.background = element_blank(),
+     legend.title=element_blank())
+p
+#tltip <- tooltip_table(c("",""),c(y0,y1))
+#highchart() %>% 
+#hchart(zz,type = "bar",hcaes(x=Party,y=Munic,group=Rang)) %>% 
+#  hc_tooltip(useHTML = TRUE, headerFormat = "", pointFormat = tltip) %>%
+#  hc_title(text = "Nombre de Municipalités")%>%
+#  hc_xAxis(title=list(text="Parties politique/Listes"))%>%
+#  hc_yAxis(title=list(text=""))
+```
+
+### 
+
+```{r}
+n_votes=tot_votes_p=rep(0,length(pp))
+for(i in 2:length(pp)){
+  N=M=0
+  for(j in 1:length(Vcols)){
+    x=0
+    y=0
+    ii=grep(pp[i],fdc2@data[,Ncols[j]])
+    y=sum(rowSums(fdc2@data[ii,Vcols],na.rm=T))
+    if(length(ii)>0) x=sum(fdc2@data[ii,Vcols[j]],na.rm = T)
+    N=N+x
+    M=M+y
+  }
+  n_votes[i]=N
+  tot_votes_p[i]=M
+}
+tot=sum(sapply(1:length(Vcols),function(i)sum(fdc2@data[,Vcols[i]],na.rm=T)))
+n_votes[1]=tot-sum(n_votes)
+tot_votes_p[1]=sum(n_votes)
+dt=cbind.data.frame(Parties=pp,Votes=n_votes,Pr=n_votes/sum(n_votes),Pr2=n_votes/tot_votes_p)
+dt=dt[-which(dt$Votes==0),]
+library(DT)
+datatable(dt[,c(1,2,3,4)],class = 'cell-border stripe',rownames = FALSE,
+           colnames = c("","Votes","% Nat.","% Munic. "))%>%formatPercentage('Pr', 2)%>%formatPercentage('Pr2', 2)
+```
