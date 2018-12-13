@@ -1,0 +1,11 @@
+
+L’Institut National de la Statistique (INS) a réalisé ***l’Enquête Nationale sur le Travail des Enfants***.
+Cette enquête est la première en son genre en Tunisie. Elle couvre un échantillon de 12.720 ménages ; soit 9.400 enfants âgés de 5 à 17 ans.
+Cette enquête permet d’avoir des désagrégations par
+
+  * sexe
+  * milieu de résidence Communal/Non communal
+  * âge, et avec une représentativité au niveau des grandes régions (GrandTunis , Nord-Est , Nord-Ouest , Centre-Est , Centre-Ouest , Sud-Est et Sud-Ouest ).
+
+Elle fournit de plus amples informations pour mieux appréhender la situation du travail des
+enfants en Tunisie en vue d’identifier les types d’interventions appropriées.
