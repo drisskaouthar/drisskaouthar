@@ -1,0 +1,52 @@
+Area,CancerType,Year,Sex,AgeAdjustedRate,CaseCount,Population
+Nevada,Female Breast,2011-2015,Female,109.4,8619,6943883
+Texas,Female Breast,2011-2015,Female,111.7,76287,66782188
+New Mexico,Female Breast,2011-2015,Female,112.4,7051,5259512
+Wyoming,Female Breast,2011-2015,Female,112.6,1830,1418579
+Arizona,Female Breast,2011-2015,Female,112.9,22214,16686987
+Arkansas,Female Breast,2011-2015,Female,114.7,10399,7527040
+Mississippi,Female Breast,2011-2015,Female,116,10256,7681243
+Oklahoma,Female Breast,2011-2015,Female,118.4,13335,9710622
+Utah,Female Breast,2011-2015,Female,115.1,7239,7211845
+West Virginia,Female Breast,2011-2015,Female,116.3,7252,4682484
+Alabama,Female Breast,2011-2015,Female,120.9,18227,12434320
+California,Female Breast,2011-2015,Female,121.6,128452,96473279
+Florida,Female Breast,2011-2015,Female,116,77149,50178974
+Indiana,Female Breast,2011-2015,Female,121.7,23676,16660636
+Michigan,Female Breast,2011-2015,Female,123.4,38069,25184325
+Montana,Female Breast,2011-2015,Female,123.2,3948,2523991
+Nebraska,Female Breast,2011-2015,Female,124.1,6710,4694425
+North Dakota,Female Breast,2011-2015,Female,123.7,2479,1766066
+Ohio,Female Breast,2011-2015,Female,126.2,45913,29556637
+Oregon,Female Breast,2011-2015,Female,124.9,15350,9943139
+Tennessee,Female Breast,2011-2015,Female,122.2,24490,16647506
+Alaska,Female Breast,2011-2015,Female,124.1,2100,1751388
+Colorado,Female Breast,2011-2015,Female,123.5,17933,13143731
+Georgia,Female Breast,2011-2015,Female,125.2,34871,25602013
+Idaho,Female Breast,2011-2015,Female,122.2,5487,4031377
+Maine,Female Breast,2011-2015,Female,125.7,5805,3390025
+Iowa,Female Breast,2011-2015,Female,123.4,11646,7786515
+Kansas,Female Breast,2011-2015,Female,125.3,10459,7266752
+Kentucky,Female Breast,2011-2015,Female,125,16853,11162177
+Louisiana,Female Breast,2011-2015,Female,124.2,16703,11806691
+Massachusetts,Female Breast,2011-2015,Female,137.6,28737,17270124
+Minnesota,Female Breast,2011-2015,Female,131.4,20784,13622676
+Missouri,Female Breast,2011-2015,Female,128.2,23876,15396118
+New Hampshire,Female Breast,2011-2015,Female,143.9,6161,3349178
+New Jersey,Female Breast,2011-2015,Female,133.5,36793,22782547
+New York,Female Breast,2011-2015,Female,131.3,78826,50613521
+North Carolina,Female Breast,2011-2015,Female,131,39269,25270538
+Pennsylvania,Female Breast,2011-2015,Female,131,54672,32658122
+Rhode Island,Female Breast,2011-2015,Female,135.3,4537,2716431
+South Carolina,Female Breast,2011-2015,Female,128.3,19225,12277276
+South Dakota,Female Breast,2011-2015,Female,134.3,3293,2096190
+Vermont,Female Breast,2011-2015,Female,130.4,2698,1587579
+Virginia,Female Breast,2011-2015,Female,127.9,31085,20973326
+Washington,Female Breast,2011-2015,Female,135.3,27427,17493103
+Wisconsin,Female Breast,2011-2015,Female,129.7,22561,14446368
+Connecticut,Female Breast,2011-2015,Female,140.2,16000,9201326
+Delaware,Female Breast,2011-2015,Female,133.8,3994,2387966
+District of Columbia,Female Breast,2011-2015,Female,139.7,2350,1700582
+Hawaii,Female Breast,2011-2015,Female,136.1,5783,3495512
+Maryland,Female Breast,2011-2015,Female,131.7,23620,15278403
+Illinois,Female Breast,2011-2015,Female,131.7,49734,32741282
